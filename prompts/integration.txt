@@ -1,0 +1,39 @@
+You are an expert Scenic code integrator. Your task is to merge and refactor the following discrete Scenic code components into a single, coherent, and optimized simulation scenario.
+
+SCENARIO DESCRIPTION:
+{scenario_description}
+
+MAP INFORMATION:
+{town}
+
+SCENIC HEADER:
+{scenic_header}
+
+BEHAVIOR CODE:
+{behavior_code}
+
+GEOMETRY CODE:
+{geometry_code}
+
+SPAWN CODE:
+{spawn_code}
+
+INTEGRATION REQUIREMENTS:
+1. Eliminate code redundancy and duplicate definitions
+2. Optimize variable naming for clarity and consistency
+3. Ensure proper logical flow and execution order
+4. Resolve any syntax conflicts or inconsistencies
+5. Maintain complete scenario semantics
+6. Follow Scenic language best practices
+7. Create clean, readable, and maintainable code structure
+
+OUTPUT INSTRUCTIONS:
+- Generate a complete, executable Scenic file
+- Start with scenario description as docstring
+- Include all necessary imports and parameters
+- Organize code in logical sections: headers, behaviors, geometry, spawning
+- Ensure all variables are properly defined before use
+- Remove any placeholder comments or debug statements
+- Optimize for performance and readability
+
+Provide only the final integrated Scenic code without explanations or comments.
