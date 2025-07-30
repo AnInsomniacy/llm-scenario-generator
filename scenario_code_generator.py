@@ -1,5 +1,5 @@
+import os
 import json
-
 from chroma_database.scenic_retriever import search_snippets
 from llm_clients.gemini_client import get_llm_response
 
@@ -106,9 +106,11 @@ def decompose_scenario(scenario):
 
 def format_snippets_content(snippets):
     content_parts = []
-    for snippet in snippets:
+    for i, snippet in enumerate(snippets, 1):
+        content_parts.append(f"--- Example {i} ---")
         content_parts.append(f"Description: {snippet['description']}")
         content_parts.append(f"Snippet: {snippet['code']}")
+        content_parts.append("=" * 50)
         content_parts.append("")
     return "\n".join(content_parts)
 
