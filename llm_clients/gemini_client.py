@@ -1,7 +1,10 @@
 from google import genai
 import json
+import os
 
-with open("api_keys.json", "r") as f:
+config_path = os.path.join(os.path.dirname(__file__), "api_keys.json")
+
+with open(config_path, "r") as f:
     config = json.load(f)
 
 client = genai.Client(api_key=config["gemini_api_key"])
