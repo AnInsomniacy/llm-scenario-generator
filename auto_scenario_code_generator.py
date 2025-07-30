@@ -1,9 +1,7 @@
 import json
-
-import scenic
-
 from chroma_database.scenic_retriever import search_snippets
 from llm_clients.deepseek_client import get_llm_response
+from scenic_validator import validate_scenic_code
 
 BEHAVIOR_PROMPT_PATH = "prompts/behavior.txt"
 GEOMETRY_PROMPT_PATH = "prompts/geometry.txt"
@@ -32,19 +30,8 @@ def print_success(message, color=Colors.GREEN):
     print(f"{color}✓ {message}{Colors.END}")
 
 
-def print_code_section(section_name, code, color=Colors.CYAN):
-    print(f"{color}{Colors.BOLD}=== {section_name} ==={Colors.END}")
-    print(f"{Colors.WHITE}{code}{Colors.END}")
-    print()
-
-
 def load_prompt_template(prompt_path):
     with open(prompt_path, "r", encoding="utf-8") as f:
-        return f.read()
-
-
-def load_decomposition_template():
-    with open(SCENARIO_DECOMPOSITION_PATH, "r", encoding="utf-8") as f:
         return f.read()
 
 
@@ -62,15 +49,12 @@ def clean_json_response(response):
 def extract_code_between_backticks(text):
     first_backticks = text.find('```')
     last_backticks = text.rfind('```')
-
     if first_backticks == -1 or first_backticks == last_backticks:
         return text.strip()
-
     start_pos = first_backticks + 3
     first_newline = text.find('\n', start_pos)
     if first_newline != -1 and first_newline < last_backticks:
         start_pos = first_newline + 1
-
     code = text[start_pos:last_backticks]
     return code.strip()
 
@@ -78,7 +62,7 @@ def extract_code_between_backticks(text):
 def decompose_scenario(scenario):
     try:
         print("Loading prompt template...")
-        prompt_template = load_decomposition_template()
+        prompt_template = load_prompt_template(SCENARIO_DECOMPOSITION_PATH)
         full_prompt = prompt_template.replace("{scenario}", scenario)
 
         print("\nSending request to LLM...")
@@ -232,19 +216,6 @@ def integrate_code_components(scenario_description, town, scenic_header, behavio
         return None
 
 
-def validate_scenic_syntax(scenic_code):
-    try:
-        print_step("STEP 5: SYNTAX VALIDATION", Colors.BLUE)
-        print("  • Compiling scenic code for validation...")
-        scenario = scenic.scenarioFromString(scenic_code)
-        print_success("Syntax validation passed")
-        return True, None
-    except Exception as e:
-        print(f"{Colors.RED}✗ Scenic validation failed:{Colors.END}")
-        print(f"{Colors.RED}{e}{Colors.END}")
-        return False, str(e)
-
-
 def generate_scenario_code(scenario_description):
     try:
         print_step("STEP 1: SCENARIO DECOMPOSITION", Colors.PURPLE)
@@ -315,19 +286,12 @@ def generate_scenario_code(scenario_description):
             return None
 
         print()
-        print_step("FINAL INTEGRATED SCENIC CODE (BEFORE VALIDATION)", Colors.BOLD + Colors.WHITE)
+        print_step("FINAL INTEGRATED SCENIC CODE", Colors.BOLD + Colors.WHITE)
         print("=" * 80)
         print(f"{Colors.WHITE}{integrated_code}{Colors.END}")
         print("=" * 80)
-        print()
 
-        is_valid, error_msg = validate_scenic_syntax(integrated_code)
-        if not is_valid:
-            print(f"{Colors.RED}✗ Generated code has syntax errors{Colors.END}")
-            print(f"Error: {error_msg}")
-            return None
-
-        print_success("Enhanced scenic code generation completed successfully")
+        print_success("Scenic code generation completed successfully")
         return integrated_code
 
     except Exception as e:
@@ -338,18 +302,21 @@ def generate_scenario_code(scenario_description):
 def main():
     test_scenario = "The ego encounters a parked car blocking its lane and must use the opposite lane to bypass the vehicle, carefully assessing the situation and yielding to oncoming traffic, when an oncoming motorcyclist swerves into the lane unexpectedly, necessitating the ego to brake or maneuver to avoid a potential accident."
 
-    print(f"{Colors.BOLD}{Colors.PURPLE}ENHANCED SCENIC CODE GENERATOR{Colors.END}")
+    print(f"{Colors.BOLD}{Colors.PURPLE}SCENIC CODE GENERATOR{Colors.END}")
     print(f"Scenario: {test_scenario}")
     print()
 
-    try:
-        scenic_code = generate_scenario_code(test_scenario)
+    scenic_code = generate_scenario_code(test_scenario)
 
-        if not scenic_code:
-            print(f"{Colors.RED}✗ Failed to generate scenic code{Colors.END}")
-
-    except Exception as e:
-        print(f"{Colors.RED}✗ Error in main: {e}{Colors.END}")
+    if scenic_code:
+        print()
+        validation_result = validate_scenic_code(scenic_code)
+        if validation_result["valid"]:
+            print_success("All processes completed successfully")
+        else:
+            print(f"{Colors.RED}✗ Code validation failed: {validation_result['error']}{Colors.END}")
+    else:
+        print(f"{Colors.RED}✗ Failed to generate scenic code{Colors.END}")
 
 
 if __name__ == "__main__":
