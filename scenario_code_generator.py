@@ -1,7 +1,7 @@
-import os
 import json
+
 from chroma_database.scenic_retriever import search_snippets
-from llm_clients.gemini_client import get_llm_response
+from llm_clients.deepseek_client import get_llm_response
 
 BEHAVIOR_PROMPT_PATH = "prompts/behavior.txt"
 GEOMETRY_PROMPT_PATH = "prompts/geometry.txt"
@@ -54,6 +54,23 @@ def clean_json_response(response):
     if cleaned.endswith("```"):
         cleaned = cleaned[:-3].strip()
     return cleaned.strip()
+
+
+def extract_code_between_backticks(text):
+    first_backticks = text.find('```')
+    last_backticks = text.rfind('```')
+
+    if first_backticks == -1 or first_backticks == last_backticks:
+        return text.strip()
+
+    start_pos = first_backticks + 3
+
+    first_newline = text.find('\n', start_pos)
+    if first_newline != -1 and first_newline < last_backticks:
+        start_pos = first_newline + 1
+
+    code = text[start_pos:last_backticks]
+    return code.strip()
 
 
 def decompose_scenario(scenario):
@@ -134,8 +151,10 @@ def generate_code_for_category(category_description, category_type, prompt_path)
     print(f"  • Generating {category_type} code with LLM...")
     response = get_llm_response(full_prompt)
 
-    print(f"{Colors.CYAN}{Colors.BOLD}=== LLM RESPONSE FOR {category_type.upper()} ==={Colors.END}")
-    print(f"{Colors.WHITE}{response.strip()}{Colors.END}")
+    cleaned_code = clean_code_block(response)
+
+    print(f"{Colors.CYAN}{Colors.BOLD}=== CLEANED LLM RESPONSE FOR {category_type.upper()} ==={Colors.END}")
+    print(f"{Colors.WHITE}{cleaned_code}{Colors.END}")
     print(f"{Colors.CYAN}{'=' * 50}{Colors.END}")
     print()
 
@@ -144,12 +163,7 @@ def generate_code_for_category(category_description, category_type, prompt_path)
 
 
 def clean_code_block(code):
-    lines = code.split('\n')
-    cleaned_lines = []
-    for line in lines:
-        if not line.strip().startswith('```'):
-            cleaned_lines.append(line)
-    return '\n'.join(cleaned_lines).strip()
+    return extract_code_between_backticks(code)
 
 
 def extract_town_from_geometry(geometry_code):
