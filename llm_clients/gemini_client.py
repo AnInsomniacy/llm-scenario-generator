@@ -7,7 +7,7 @@ with open("api_keys.json", "r") as f:
 client = genai.Client(api_key=config["gemini_api_key"])
 
 
-def get_response(prompt):
+def get_llm_response(prompt):
     response = ""
     stream = client.models.generate_content_stream(
         model='gemini-2.0-flash',
@@ -26,7 +26,7 @@ def get_response(prompt):
 
 def main():
     prompt = "Write a short story about a robot learning to paint"
-    result = get_response(prompt)
+    result = get_llm_response(prompt)
     print(f"\nComplete response length: {len(result)} characters")
 
 
