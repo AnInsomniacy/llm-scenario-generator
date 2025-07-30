@@ -13,7 +13,7 @@ client = genai.Client(api_key=config["gemini_api_key"])
 def get_llm_response(prompt):
     response = ""
     stream = client.models.generate_content_stream(
-        model='gemini-2.0-flash',
+        model='gemini-2.5-pro',
         contents=prompt
     )
 

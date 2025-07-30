@@ -280,7 +280,7 @@ def generate_scenario_code(scenario_description):
 
 
 def main():
-    test_scenario = "A car is driving through a busy city street when a cyclist suddenly swerves into the path of the car, forcing it to brake hard to avoid a collision."
+    test_scenario = "The ego encounters a parked car blocking its lane and must use the opposite lane to bypass the vehicle, carefully assessing the situation and yielding to oncoming traffic, when an oncoming motorcyclist swerves into the lane unexpectedly, necessitating the ego to brake or maneuver to avoid a potential accident."
 
     print(f"{Colors.BOLD}{Colors.PURPLE}SCENIC CODE GENERATOR{Colors.END}")
     print(f"Scenario: {test_scenario}")
