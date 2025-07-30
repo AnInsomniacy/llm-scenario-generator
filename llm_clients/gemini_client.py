@@ -25,7 +25,7 @@ def get_llm_response(prompt):
 
 
 def main():
-    prompt = "Write a short story about a robot learning to paint"
+    prompt = "你谁啊"
     result = get_llm_response(prompt)
     print(f"\nComplete response length: {len(result)} characters")
 
