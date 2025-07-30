@@ -1,6 +1,9 @@
+import os
 import subprocess
 import scenic
 from scenic.core.errors import ScenicError
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 class Colors:
@@ -39,3 +42,38 @@ def validate_scenic_code(scenic_code):
         error_msg = str(e)
         print(f"{Colors.RED}✗ Validation failed: {error_msg}{Colors.END}")
         return {"valid": False, "error": error_msg}
+
+
+def main():
+    print(f"{Colors.BOLD}SCENIC VALIDATOR DEMO{Colors.END}")
+    print()
+
+    sample_scenic_code = '''"""Simple Scenic scenario with basic objects"""
+
+ego = Object at (0, 0)
+
+other_car = Object at (10, 5),
+    with heading 90 deg
+
+param distance = Range(5, 15)
+'''
+
+    print("Testing sample Scenic code:")
+    print(f"{Colors.BLUE}{'=' * 60}{Colors.END}")
+    print(sample_scenic_code.strip())
+    print(f"{Colors.BLUE}{'=' * 60}{Colors.END}")
+    print()
+
+    result = validate_scenic_code(sample_scenic_code)
+
+    print()
+    print(f"Validation result: {result}")
+
+    if result["valid"]:
+        print_success("Demo completed successfully")
+    else:
+        print(f"{Colors.RED}✗ Demo failed{Colors.END}")
+
+
+if __name__ == "__main__":
+    main()

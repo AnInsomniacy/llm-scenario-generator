@@ -3,10 +3,10 @@ import json
 from chroma_database.scenic_retriever import search_snippets
 from llm_clients.deepseek_client import get_llm_response
 
-BEHAVIOR_PROMPT_PATH = "prompts/behavior.txt"
-GEOMETRY_PROMPT_PATH = "prompts/geometry.txt"
-SPAWN_PROMPT_PATH = "prompts/spawn.txt"
-SCENARIO_DECOMPOSITION_PATH = "prompts/decomposition.txt"
+BEHAVIOR_PROMPT_PATH = "../prompts/behavior.txt"
+GEOMETRY_PROMPT_PATH = "../prompts/geometry.txt"
+SPAWN_PROMPT_PATH = "../prompts/spawn.txt"
+SCENARIO_DECOMPOSITION_PATH = "../prompts/decomposition.txt"
 
 
 class Colors:

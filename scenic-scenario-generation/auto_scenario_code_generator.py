@@ -3,11 +3,11 @@ from chroma_database.scenic_retriever import search_snippets
 from llm_clients.deepseek_client import get_llm_response
 from scenic_validator import validate_scenic_code
 
-BEHAVIOR_PROMPT_PATH = "prompts/behavior.txt"
-GEOMETRY_PROMPT_PATH = "prompts/geometry.txt"
-SPAWN_PROMPT_PATH = "prompts/spawn.txt"
-SCENARIO_DECOMPOSITION_PATH = "prompts/decomposition.txt"
-CODE_INTEGRATION_PROMPT_PATH = "prompts/integration.txt"
+BEHAVIOR_PROMPT_PATH = "../prompts/behavior.txt"
+GEOMETRY_PROMPT_PATH = "../prompts/geometry.txt"
+SPAWN_PROMPT_PATH = "../prompts/spawn.txt"
+SCENARIO_DECOMPOSITION_PATH = "../prompts/decomposition.txt"
+CODE_INTEGRATION_PROMPT_PATH = "../prompts/integration.txt"
 
 
 class Colors:
