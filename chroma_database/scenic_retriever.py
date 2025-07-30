@@ -1,22 +1,12 @@
-"""
-Retrieve code snippets from scenic codebase using semantic search
-
-search_snippets(query_text, category=None, limit=3):
-    query_text: natural language description to search
-    category: filter by type ('behavior', 'geometry', 'spawn') or None for all
-    limit: maximum number of results to return
-    returns: list of snippet dictionaries with uid, type, description, code, similarity
-
-get_snippet_by_id(uid):
-    uid: unique identifier of the snippet
-    returns: snippet dictionary or None if not found
-"""
-
+import os
 import chromadb
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(script_dir, "scenic_codebase")
 
 
 def search_snippets(query_text, category=None, limit=3):
-    client = chromadb.PersistentClient(path="scenic_codebase")
+    client = chromadb.PersistentClient(path=db_path)
     collection = client.get_collection("scenario_snippets")
 
     where_filter = {"type": category} if category else None
@@ -42,7 +32,7 @@ def search_snippets(query_text, category=None, limit=3):
 
 
 def get_snippet_by_id(uid):
-    client = chromadb.PersistentClient(path="scenic_codebase")
+    client = chromadb.PersistentClient(path=db_path)
     collection = client.get_collection("scenario_snippets")
 
     results = collection.get(
@@ -61,7 +51,8 @@ def get_snippet_by_id(uid):
 
 
 def main():
-    results = search_snippets("vehicle changes lane", "behavior", 2)
+    results = search_snippets("The adversarial cyclist suddenly swerves into the path of the ego vehicle.", "behavior",
+                              3)
     for snippet in results:
         print(f"UID: {snippet['uid']} | Similarity: {snippet['similarity']:.3f}")
         print(f"Description: {snippet['description']}")
