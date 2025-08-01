@@ -44,7 +44,7 @@ pip install -r requirements.txt
 ```python
 import sys
 
-sys.path.append('scenic_scenario_generation')
+sys.path.append('scenic_generation')
 from auto_scenario_code_generator import generate_scenario_code
 
 # Generate a scenario from natural language
@@ -55,8 +55,8 @@ scenic_code = generate_scenario_code(scenario_description)
 ### Command Line
 
 ```bash
-cd scenic_scenario_generation
-python auto_scenario_code_generator.py
+cd scenic_generation
+python auto_scenario_generator.py
 ```
 
 ### Example Input/Output
