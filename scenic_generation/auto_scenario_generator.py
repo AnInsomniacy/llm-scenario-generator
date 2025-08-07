@@ -318,13 +318,6 @@ def generate_scenario_code(scenario_description):
         print("=" * 80)
 
         print_success("Scenic code generation completed successfully")
-
-        validation_result = validate_scenic_code(integrated_code)
-        if validation_result["valid"]:
-            print_success("All processes completed successfully")
-        else:
-            print(f"{Colors.RED}✗ Code validation failed: {validation_result['error']}{Colors.END}")
-
         return integrated_code
 
     except Exception as e:
@@ -337,6 +330,15 @@ def main():
 
     try:
         scenic_code = generate_scenario_code(test_scenario)
+
+        if scenic_code:
+            print()
+            validation_result = validate_scenic_code(scenic_code)
+            if validation_result["valid"]:
+                print_success("All processes completed successfully")
+            else:
+                print(f"{Colors.RED}✗ Code validation failed: {validation_result['error']}{Colors.END}")
+
     except Exception as e:
         print(f"✗ Error in main: {e}")
 
